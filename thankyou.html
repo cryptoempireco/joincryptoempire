@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Application Received — Crypto Empire Mastermind</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #080808;
+      color: #e8e8e8;
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #F0CC6A;
+      --black: #080808;
+      --black-2: #0f0f0f;
+      --black-3: #161616;
+      --black-4: #1e1e1e;
+      --white: #ffffff;
+      --grey: #999999;
+      --grey-light: #cccccc;
+      --radius: 12px;
+      --radius-lg: 20px;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Playfair Display', serif; line-height: 1.2; }
+
+    .gold-gradient {
+      background: linear-gradient(135deg, #C9A84C 0%, #F0CC6A 40%, #C9A84C 70%, #a07830 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(8, 8, 8, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+      padding: 16px 0;
+    }
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ===== CONFETTI HEADER ===== */
+    .page-top {
+      padding: 120px 24px 56px;
+      text-align: center;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201, 168, 76, 0.09) 0%, transparent 65%),
+        #080808;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-top::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(90deg, rgba(201,168,76,0.025) 0px, rgba(201,168,76,0.025) 1px, transparent 1px, transparent 80px),
+        repeating-linear-gradient(0deg, rgba(201,168,76,0.025) 0px, rgba(201,168,76,0.025) 1px, transparent 1px, transparent 80px);
+      pointer-events: none;
+    }
+
+    .check-circle {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, #C9A84C, #F0CC6A);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      font-size: 2rem;
+      box-shadow: 0 0 60px rgba(201,168,76,0.35);
+      position: relative;
+      z-index: 1;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    .page-top h1 {
+      font-size: clamp(2rem, 4.5vw, 3.4rem);
+      font-weight: 800;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 0.5s 0.1s ease both;
+    }
+    .page-top .sub {
+      font-size: 1.1rem;
+      color: var(--grey-light);
+      max-width: 540px;
+      margin: 0 auto;
+      line-height: 1.75;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 0.5s 0.2s ease both;
+    }
+    @keyframes fadeUp {
+      from { transform: translateY(16px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main {
+      padding: 0 24px 100px;
+      background: var(--black);
+    }
+    .inner {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* ===== VIDEO SECTION ===== */
+    .video-section {
+      margin-top: -8px;
+      padding-top: 64px;
+    }
+    .video-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.3);
+      color: var(--gold-light);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+    }
+    .video-label-dot {
+      width: 7px; height: 7px;
+      background: var(--gold-light);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    .video-heading {
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .video-subtext {
+      font-size: 1rem;
+      color: var(--grey-light);
+      margin-bottom: 36px;
+      max-width: 600px;
+    }
+
+    /* Video player card */
+    .video-card {
+      background: var(--black-3);
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.08);
+      position: relative;
+    }
+    .video-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+      z-index: 2;
+    }
+    .video-wrap {
+      aspect-ratio: 16 / 9;
+      position: relative;
+      background: #000;
+      cursor: pointer;
+    }
+    .video-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* Play overlay */
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.42);
+      transition: background 0.25s;
+      z-index: 1;
+    }
+    .play-overlay:hover { background: rgba(0,0,0,0.28); }
+    .play-btn {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 40px rgba(201,168,76,0.6);
+      margin-bottom: 16px;
+      transition: transform 0.2s;
+    }
+    .play-overlay:hover .play-btn { transform: scale(1.08); }
+    .play-btn svg { fill: #000; width: 30px; height: 30px; margin-left: 5px; }
+    .play-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+    .play-duration {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.6);
+      margin-top: 4px;
+      letter-spacing: 0.04em;
+    }
+    /* Video bottom bar */
+    .video-bar {
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .video-bar-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #000;
+      flex-shrink: 0;
+    }
+    .video-bar-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--white);
+    }
+    .video-bar-title {
+      font-size: 0.78rem;
+      color: var(--gold);
+      margin-top: 2px;
+    }
+    .video-bar-badge {
+      margin-left: auto;
+      background: rgba(87,242,135,0.1);
+      border: 1px solid rgba(87,242,135,0.25);
+      color: #57F287;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 50px;
+      flex-shrink: 0;
+    }
+
+    /* ===== DIVIDER ===== */
+    .gold-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.25), transparent);
+      margin: 72px 0;
+    }
+
+    /* ===== NEXT STEPS ===== */
+    .steps-heading {
+      text-align: center;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 48px;
+    }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .step-card {
+      background: var(--black-3);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-lg);
+      padding: 32px 26px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .step-card:hover { border-color: rgba(201,168,76,0.2); }
+    .step-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: rgba(201, 168, 76, 0.12);
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .step-icon { font-size: 1.8rem; margin-bottom: 14px; display: block; }
+    .step-card h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .step-card p {
+      font-size: 0.88rem;
+      color: var(--grey);
+      line-height: 1.7;
+    }
+    .step-timing {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(201,168,76,0.08);
+      border: 1px solid rgba(201,168,76,0.2);
+      padding: 4px 10px;
+      border-radius: 50px;
+    }
+
+    /* ===== WHILE YOU WAIT ===== */
+    .wait-section {
+      margin-top: 72px;
+      background: linear-gradient(160deg, #131313, #161616);
+      border: 1px solid rgba(201,168,76,0.18);
+      border-radius: var(--radius-lg);
+      padding: 48px 44px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .wait-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+    }
+    .wait-section h3 {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+    }
+    .wait-section p {
+      color: var(--grey-light);
+      font-size: 0.95rem;
+      max-width: 500px;
+      margin: 0 auto 36px;
+      line-height: 1.75;
+    }
+    .social-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+    }
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--black-4);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--grey-light);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .social-btn:hover {
+      border-color: rgba(201,168,76,0.3);
+      color: var(--gold-light);
+      transform: translateY(-1px);
+    }
+    .social-btn svg { flex-shrink: 0; }
+
+    /* ===== FAQ MINI ===== */
+    .faq-mini { margin-top: 72px; }
+    .faq-mini h3 {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .faq-item {
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-align: left;
+      padding: 20px 0;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .faq-icon {
+      width: 26px; height: 26px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--gold-light);
+      font-size: 1.1rem;
+      transition: transform 0.3s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+    }
+    .faq-item.open .faq-a { max-height: 200px; padding-bottom: 20px; }
+    .faq-a p { font-size: 0.9rem; color: var(--grey); line-height: 1.75; }
+
+    /* ===== FOOTER ===== */
+    .mini-footer {
+      text-align: center;
+      padding: 36px 24px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.2);
+      line-height: 1.8;
+    }
+    .mini-footer a { color: rgba(255,255,255,0.3); text-decoration: none; }
+    .mini-footer a:hover { color: var(--gold); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 700px) {
+      .steps-grid { grid-template-columns: 1fr; }
+      .wait-section { padding: 36px 24px; }
+    }
+    @media (max-width: 520px) {
+      .video-bar { flex-wrap: wrap; }
+      .video-bar-badge { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" style="display:flex; align-items:center; text-decoration:none;">
+        <img src="logo.png" alt="Crypto Empire Mastermind" style="height:40px; width:auto;">
+      </a>
+    </div>
+  </nav>
+
+  <!-- CONFIRMATION HEADER -->
+  <div class="page-top">
+    <div class="check-circle">✓</div>
+    <h1>You're In the Queue,<br><span class="gold-gradient">Application Received!</span></h1>
+    <p class="sub">
+      Your application has been submitted and Connor will personally review it within 24–48 hours. Watch the short video below — it covers exactly what happens next.
+    </p>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+    <div class="inner">
+
+      <!-- VIDEO SECTION -->
+      <div class="video-section">
+        <div class="video-label">
+          <span class="video-label-dot"></span>
+          Watch This First
+        </div>
+        <h2 class="video-heading">A Personal Message<br>From <span class="gold-gradient">Connor Sellers</span></h2>
+        <p class="video-subtext">Connor walks you through exactly what happens next, what to expect, and how to prepare so you're ready to hit the ground running the moment you're accepted.</p>
+
+        <div class="video-card">
+          <div class="video-wrap" id="video-wrap">
+            <!--
+              ADD YOUR VIDEO:
+              1. Save your next-steps video as "next-steps.mp4" in this folder
+              2. Optionally add a thumbnail image as "next-steps-thumb.jpg"
+              3. The play button and overlay are already set up below
+            -->
+            <video
+              id="next-steps-video"
+              poster="next-steps-thumb.jpg"
+              preload="none"
+              style="width:100%; height:100%; object-fit:cover; display:block;"
+            >
+              <source src="next-steps.mp4" type="video/mp4">
+            </video>
+
+            <!-- Play overlay (auto-hides when video plays) -->
+            <div class="play-overlay" id="play-overlay" onclick="playNextSteps()">
+              <div class="play-btn">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div class="play-text">Watch Connor's Message</div>
+              <div class="play-duration">~2 minutes</div>
+            </div>
+          </div>
+
+          <!-- Video footer bar -->
+          <div class="video-bar">
+            <div class="video-bar-avatar">C</div>
+            <div>
+              <div class="video-bar-name">Connor Sellers</div>
+              <div class="video-bar-title">Founder, Crypto Empire Mastermind</div>
+            </div>
+            <div class="video-bar-badge">✓ Your Next Steps</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIVIDER -->
+      <div class="gold-divider"></div>
+
+      <!-- NEXT STEPS -->
+      <h2 class="steps-heading">What Happens <span class="gold-gradient">From Here</span></h2>
+      <div class="steps-grid">
+
+        <div class="step-card">
+          <span class="step-icon">📋</span>
+          <div class="step-num">01</div>
+          <h3>Application Review</h3>
+          <p>Connor and the team will personally review your application. We look at your background, goals, and fit with the community.</p>
+          <span class="step-timing">Within 24–48 hours</span>
+        </div>
+
+        <div class="step-card">
+          <span class="step-icon">📧</span>
+          <div class="step-num">02</div>
+          <h3>Decision Email</h3>
+          <p>You'll receive an email at the address you provided. If accepted, it will include your onboarding link, payment details, and next steps.</p>
+          <span class="step-timing">Check your inbox + spam</span>
+        </div>
+
+        <div class="step-card">
+          <span class="step-icon">🚀</span>
+          <div class="step-num">03</div>
+          <h3>Get Instant Access</h3>
+          <p>Once you complete onboarding, you'll be live inside the private Discord, course library, and signal channels immediately.</p>
+          <span class="step-timing">Same day as acceptance</span>
+        </div>
+
+      </div>
+
+      <!-- WHILE YOU WAIT -->
+      <div class="wait-section">
+        <h3>While You Wait — <span class="gold-gradient">Follow Along</span></h3>
+        <p>Get a feel for Connor's analysis style and market commentary. Our best free content is published across these channels daily.</p>
+        <div class="social-row">
+          <a href="#" class="social-btn" id="link-youtube">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            YouTube
+          </a>
+          <a href="#" class="social-btn" id="link-twitter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.713 5.955zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            X (Twitter)
+          </a>
+          <a href="#" class="social-btn" id="link-instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            Instagram
+          </a>
+        </div>
+      </div>
+
+      <!-- MINI FAQ -->
+      <div class="faq-mini">
+        <h3>Quick <span class="gold-gradient">Questions</span></h3>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What if I don't hear back within 48 hours?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            <p>Check your spam or promotions folder first — our emails sometimes land there. If you still haven't heard anything after 48 hours, send us a message directly at <a href="mailto:cryptoempireco@gmail.com" style="color:var(--gold);">cryptoempireco@gmail.com</a> with your name and we'll sort it out right away.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Can I submit another application if I made a mistake?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            <p>Yes — just email us at <a href="mailto:cryptoempireco@gmail.com" style="color:var(--gold);">cryptoempireco@gmail.com</a> and let us know. We'll discard the previous submission and use your updated application.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Is there anything I should do to prepare?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            <p>Watch Connor's video above — he covers exactly how to prepare and what your first week inside will look like. Beyond that, just keep an eye on your inbox. Once you're accepted, you'll be up and running the same day.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What if I'm not accepted?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            <p>If we don't think it's the right fit at this time, we'll let you know respectfully via email. We may also suggest alternative resources if we feel you need a different foundation first. Our goal is your long-term success, not a quick sale.</p>
+          </div>
+        </div>
+
+      </div><!-- /faq-mini -->
+
+    </div><!-- /inner -->
+  </div><!-- /main -->
+
+  <!-- FOOTER -->
+  <div class="mini-footer">
+    <p>© 2026 Crypto Empire Mastermind &nbsp;·&nbsp; <a href="index.html">Back to Home</a> &nbsp;·&nbsp; <a href="mailto:cryptoempireco@gmail.com">Contact Us</a></p>
+    <p style="margin-top:6px; max-width:700px; margin-left:auto; margin-right:auto;">
+      All content is for educational and informational purposes only. Not financial advice. Cryptocurrency trading involves significant risk of loss. Past member results are not indicative of future performance.
+    </p>
+  </div>
+
+  <!-- JS -->
+  <script>
+    // =========================================================
+    // SOCIAL LINKS — replace # with your real URLs
+    // =========================================================
+    // document.getElementById('link-youtube').href   = 'https://youtube.com/@YourChannel';
+    // document.getElementById('link-twitter').href   = 'https://x.com/YourHandle';
+    // document.getElementById('link-instagram').href = 'https://instagram.com/YourHandle';
+
+    // =========================================================
+    // VIDEO PLAYER
+    // =========================================================
+    function playNextSteps() {
+      const video   = document.getElementById('next-steps-video');
+      const overlay = document.getElementById('play-overlay');
+      overlay.style.display = 'none';
+      video.controls = true;
+      video.play().catch(function() {
+        // Autoplay blocked or file missing — show overlay again
+        overlay.style.display = 'flex';
+      });
+    }
+
+    // Re-show overlay when video ends
+    document.getElementById('next-steps-video').addEventListener('ended', function() {
+      document.getElementById('play-overlay').style.display = 'flex';
+      this.controls = false;
+    });
+
+    // =========================================================
+    // FAQ ACCORDION
+    // =========================================================
+    function toggleFaq(btn) {
+      const item   = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
+  </script>
+
+</body>
+</html>
